@@ -13,7 +13,7 @@ export async function transcribe() {
 
   let cleanValue = transcription.text.toLowerCase().trim().replace(".", "");
 
-  if (cleanValue == "gptexit") {
+  if (cleanValue.indexOf("gptexit") > -1) {
     console.log("EXIT COMMAND RECEIVED, Shutting down");
     process.exit();
   }
