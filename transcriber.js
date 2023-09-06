@@ -20,4 +20,5 @@ export async function transcribe() {
   //TODO: proper command handling
   //TODO: fix gap between transcription being awaited and beginning of next audio chunk
   //TODO: use small recordings for command listening, long listening for actual chunking?
+  //TODO: is the message english? else discard
 }
