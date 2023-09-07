@@ -11,12 +11,7 @@ export async function transcribe() {
     model: "whisper-1",
   });
 
-  let cleanValue = transcription.text.toLowerCase().trim().replace(".", "");
-
-  if (cleanValue.indexOf("gptexit") > -1) {
-    console.log("EXIT COMMAND RECEIVED, Shutting down");
-    process.exit();
-  }
+  return transcription.text;
   //TODO: proper command handling
   //TODO: fix gap between transcription being awaited and beginning of next audio chunk
   //TODO: use small recordings for command listening, long listening for actual chunking?
