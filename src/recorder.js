@@ -1,5 +1,4 @@
 import { spawn } from "child_process";
-import path from "path";
 import say from "say";
 import { transcribe } from "./transcriber.js";
 import { removeFileIfExists } from "./utils/utils.js";
@@ -33,7 +32,7 @@ let listenerId = 1;
 export async function startListener(intervalInSeconds, tmpFileName) {
   let currentId = listenerId++;
   while (true) {
-    const fileName = path.join(__dirname, "tmp", tmpFileName);
+    const fileName = `./tmp/${tmpFileName}`;
     await recordAudio(intervalInSeconds, fileName);
 
     transcribe(fileName, intervalInSeconds < 5 ? ["hello", "exit"] : []).then(
