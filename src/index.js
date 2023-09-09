@@ -1,9 +1,12 @@
 import "dotenv/config";
+import { existsSync, mkdirSync } from "fs";
 import { startListener } from "./recorder.js";
 import { wait } from "./utils/utils.js";
 
 export default async function whisper() {
-  console.log(process.cwd());
+  if (!existsSync("./tmp")) {
+    mkdirSync("./tmp", { recursive: true });
+  }
   startListener(10, "./longRecording.wav");
   startListener(1, "./fiveSec1.wav");
   await wait(1);
