@@ -15,6 +15,7 @@ export async function recordAudio(durationSeconds, outputFileName) {
       if (code !== 0) {
         console.log(`FFmpeg exited with code ${code}`);
         console.log(outputFileName);
+        console.log(`CWD: ${process.cwd()}`);
         reject(new Error(`FFmpeg exited with code ${code}`));
       }
       resolve();
