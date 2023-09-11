@@ -2,3 +2,5 @@ node_modules
 tmp
 .env
 audio.wav
+dev.js
+.vscode
