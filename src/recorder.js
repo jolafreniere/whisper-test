@@ -1,6 +1,7 @@
 import { spawn } from "child_process";
-import say from "say";
-import { transcribe } from "./transcriber.js";
+
+import { runCommand } from "./commandHandler.js";
+import { transcribe, transcribeCommand } from "./transcriber.js";
 import { removeFileIfExists } from "./utils/utils.js";
 export async function recordAudio(durationSeconds, outputFileName) {
   await removeFileIfExists(outputFileName);
@@ -26,6 +27,7 @@ export async function recordAudio(durationSeconds, outputFileName) {
       reject(error);
     });
   });
+  VV;
 }
 
 let listenerId = 1;
@@ -37,34 +39,30 @@ export async function startListener(intervalInSeconds, tmpFileName) {
 
     transcribe(fileName, intervalInSeconds < 5 ? ["hello", "exit"] : []).then(
       (transcribedText) => {
-        parseCommand(transcribedText);
-        console.log(`LISTENER ${currentId}: ${transcribedText}`);
+        // parseCommand(transcribedText);
+        // console.log(`LISTENER ${currentId}: ${transcribedText}`);
       }
     );
   }
 }
 
-async function parseCommand(baseString) {
-  const cleanValue = baseString.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
+export async function startCommandListener(intervalInSeconds, tmpFileName) {
+  let currentId = listenerId++;
+  let parsePrompt = getParsePrompt();
+  while (true) {
+    const fileName = `./tmp/${tmpFileName}`;
+    await recordAudio(intervalInSeconds, fileName);
 
-  // Regex pattern to match the keywords "hello" and "exit"
-  const keywordPattern = /\b(hello|exit)\b/g;
-
-  // Find matches
-  const matches = cleanValue.match(keywordPattern);
-
-  if (matches) {
-    matches.forEach((match) => {
-      switch (match) {
-        case "hello":
-          console.log("you said hello");
-          break;
-        case "exit":
-          say.speak("Exiting Program");
-          console.log("EXITING PROGRAM");
-          process.exit();
-          break;
-      }
+    transcribeCommand(fileName, parsePrompt).then((transcribedText) => {
+      //parseCommand(transcribedText);
+      const numberRegex = /\d{1}-\d{1}-\d{1}/g;
+      const match = transcribedText.match(numberRegex);
+      let numbers = match[0].split("-");
+      runCommand(numbers);
     });
   }
+}
+
+function getParsePrompt() {
+  return "look for combinations of three numbers, like 5-1-1, 6-0-0, 4-9-3 etc, output should be three dash separated numbers like 3-1-1";
 }
