@@ -2,7 +2,7 @@ import "dotenv/config";
 import { existsSync, mkdirSync } from "fs";
 import { addCommand } from "./commandHandler.js";
 import { startCommandListener, startListener } from "./recorder.js";
-import { say } from "./utils/say.js";
+
 import { wait } from "./utils/utils.js";
 export async function whisper() {
   if (!existsSync("./tmp")) {

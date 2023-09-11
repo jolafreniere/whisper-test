@@ -1,8 +1,8 @@
 let isParsing = false;
-
+import { say } from "./utils/say.js";
 let commands = {};
 
-async function runCommand(numbers, say = true) {
+async function runCommand(numbers, sayCmd = true) {
   if (numbers[0] == 4 && !isParsing) {
     // First number helps confirm a valid command
     isParsing = true;
@@ -10,7 +10,7 @@ async function runCommand(numbers, say = true) {
       const code = numbers.join("");
       const command = commands[code];
       if (command) {
-        if (say) say.speak(`"Running ${command.command}`);
+        if (sayCmd) say.speak(`"Running ${command.command}`);
         await command.handler();
       }
     } finally {
